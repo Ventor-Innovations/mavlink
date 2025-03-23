@@ -1075,6 +1075,18 @@
         <description>Force reboot/shutdown of the autopilot/component regardless of system state.</description>
       </entry>
     </enum>
+    <enum name="REL_ALT_FROM_DIST_MEASURE_TYPE">
+      <description>Distance measurement type to use for setting the relative altitude of the vehicle to the current AGL with MAV_CMD_DO_SET_REL_ALT_FROM_DIST_SENSOR.</description>
+      <entry value="0" name="REL_ALT_FROM_DIST_MEASURE_TYPE_HOR_DIST">
+        <description>Measure distance during a horizontal travel distance in meters.</description>
+      </entry>
+      <entry value="1" name="REL_ALT_FROM_DIST_MEASURE_TYPE_TIME">
+        <description>Measure distance over a period of time in seconds.</description>
+      </entry>
+      <entry value="2" name="REL_ALT_FROM_DIST_MEASURE_TYPE_SAMPLE_NUM">
+        <description>Measure distance over a number of samples.</description>
+      </entry>
+    </enum>
     <!-- The MAV_CMD enum entries describe either: -->
     <!--  * the data payload of mission items (as used in the MISSION_ITEM_INT message) -->
     <!--  * the data payload of mavlink commands (as used in the COMMAND_INT and COMMAND_LONG messages) -->
@@ -1881,6 +1893,16 @@
         <param index="5">Empty</param>
         <param index="6">Empty</param>
         <param index="7">Empty</param>
+      </entry>
+      <entry value="225" name="MAV_CMD_DO_SET_REL_ALT_FROM_DIST_SENSOR" hasLocation="false" isDestination="false">
+        <description>Set the relative altitude of the vehicle to the current height above ground level (AGL), based on recent measurements from an onboard downward-facing rangefinder.</description>
+        <param index="1" label="Measurement span" default="10">Distance measurement span.</param>
+        <param index="2" label="Measurement type" enum="REL_ALT_FROM_DIST_MEASURE_TYPE" default="0">Distance measurement type.</param>
+        <param index="3" label="Maximum sensor deviation angle" units="deg" minValue="-1" maxValue="45" default="12">Maximum acceptable angle of the distance sensor from vertical. Readings taken when the vehicle attitude exceeds this angle will be rejected. This helps limit the distance measurement to the ground directly beneath the vehicle. At 50 m HAGL, a 12 degree angle creates a target area of ~10 m in radius. Set to -1 to accept all measurements regardless of vehicle orientation.</param>
+        <param index="4" label="Maximum MAD of readings" units="cm" minValue="-1" maxValue="200" default="25" increment="1">Maximum acceptable mean absolute deviation (MAD) of the sensor readings over the measurement span. If the computed MAD exceeds this threshold, suggesting the presence of an obstacle or a steep slope, the average distance is deemed unreliable and the relative altitude will not be updated. Set to -1 to disable this check.</param>
+        <param index="5" reserved="true" default="NaN"/>
+        <param index="6" reserved="true" default="NaN"/>
+        <param index="7" reserved="true" default="NaN"/>
       </entry>
       <entry value="240" name="MAV_CMD_DO_LAST" hasLocation="false" isDestination="false">
         <description>NOP - This command is only used to mark the upper limit of the DO commands in the enumeration</description>
